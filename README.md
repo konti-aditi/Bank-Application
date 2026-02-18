@@ -30,6 +30,13 @@ This project allows users to create an account, login securely, and perform basi
 ---
 
 ## Future Enhancements
+
+Pin validation before deposit and checking bank balance
+
+Seperate modules for each functionality
+
+Optimized approach for the .jar file
+
 Multiple user support
 
 Transaction table in database
