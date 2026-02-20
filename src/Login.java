@@ -31,10 +31,10 @@ public class Login {
                             Withdraw.withdraw(contact, balance, sc);
                             break;
                         case 3:
-                            Balance.checkBalance(balance);
+                            Balance.checkBalance(contact, balance, sc);
                             break;
                         case 4:
-                            Transactions.showTransactions(contact);
+                            Transactions.showTransactions(contact, sc);
                             break;
                         case 5:
                             System.out.println("Logged out");
