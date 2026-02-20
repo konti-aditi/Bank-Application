@@ -1,6 +1,6 @@
 import java.sql.*;
 import java.util.Scanner;
-// Remove invalid imports. Use fully qualified class names if not in package.
+
 
 class Bank {
 
