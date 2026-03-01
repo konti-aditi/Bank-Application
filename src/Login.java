@@ -25,10 +25,10 @@ public class Login {
                     int opt = sc.nextInt();
                     switch (opt) {
                         case 1:
-                            Deposit.deposit(contact, balance, sc);
+                            Deposit.deposit(contact, sc);
                             break;
                         case 2:
-                            Withdraw.withdraw(contact, balance, sc);
+                            Withdraw.withdraw(contact, sc);
                             break;
                         case 3:
                             Balance.checkBalance(contact, balance, sc);
