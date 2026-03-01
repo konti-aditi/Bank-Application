@@ -1,5 +1,5 @@
 public class Withdraw {
-    public static void withdraw(long contact, double balance, java.util.Scanner sc) {
+    public static void withdraw(long contact, java.util.Scanner sc) {
         System.out.print("Enter your PIN: ");
         int enteredPin = sc.nextInt();
         try {
@@ -20,20 +20,43 @@ public class Withdraw {
             }
             System.out.print("Enter amount: ");
             double amt = sc.nextDouble();
-            if (amt <= balance) {
-                balance -= amt;
+
+
+         //  Fetch latest balance from DB
+            java.sql.PreparedStatement getBal = con2.prepareStatement(
+                    "SELECT balance FROM users WHERE contact=?");
+            getBal.setLong(1, contact);
+            java.sql.ResultSet latestBal = getBal.executeQuery();
+
+            double currentBalance = 0;
+
+            if (latestBal.next()) {
+                currentBalance = rs.getDouble("balance");
+            } else {
+                System.out.println("Account not found.");
+                return;
+            }
+
+           //  Check sufficient balance
+            if (amt <= currentBalance) {
+
+                double newBalance = currentBalance - amt;
+
                 java.sql.PreparedStatement ps1 = con2.prepareStatement(
-                    "UPDATE users SET balance=? WHERE contact=?");
-                ps1.setDouble(1, balance);
+                        "UPDATE users SET balance=? WHERE contact=?");
+                ps1.setDouble(1, newBalance);
                 ps1.setLong(2, contact);
                 ps1.executeUpdate();
+
                 java.sql.PreparedStatement ps2 = con2.prepareStatement(
-                    "INSERT INTO transactions(contact,type,amount,time) VALUES(?,?,?,NOW())");
+                        "INSERT INTO transactions(contact,type,amount,time) VALUES(?,?,?,NOW())");
                 ps2.setLong(1, contact);
                 ps2.setString(2, "WITHDRAW");
                 ps2.setDouble(3, amt);
                 ps2.executeUpdate();
+
                 System.out.println("Amount Withdrawn");
+
             } else {
                 System.out.println("Insufficient Balance");
             }

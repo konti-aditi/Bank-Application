@@ -1,5 +1,5 @@
 public class Deposit {
-    public static void deposit(long contact, double balance, java.util.Scanner sc) {
+    public static void deposit(long contact, java.util.Scanner sc) {
         System.out.print("Enter your PIN: ");
         int enteredPin = sc.nextInt();
         try {
@@ -22,10 +22,27 @@ public class Deposit {
             }
             System.out.print("Enter amount: ");
             double amt = sc.nextDouble();
-            balance += amt;
+
+            //  Fetch latest balance form db:
+
+            java.sql.PreparedStatement getBal = con2.prepareStatement(
+                    "SELECT balance FROM users WHERE contact=?"
+            );
+            getBal.setLong(1, contact);
+            java.sql.ResultSet balRs = getBal.executeQuery();
+
+            double currentBalance = 0;
+
+            if (balRs.next()) {
+                currentBalance = balRs.getDouble("balance");
+            }
+
+           // Updating the  amount:
+            double newBalance = currentBalance + amt;
+
             java.sql.PreparedStatement ps1 = con2.prepareStatement(
                 "UPDATE users SET balance=? WHERE contact=?");
-            ps1.setDouble(1, balance);
+            ps1.setDouble(1, newBalance);
             ps1.setLong(2, contact);
             ps1.executeUpdate();
             java.sql.PreparedStatement ps2 = con2.prepareStatement(
